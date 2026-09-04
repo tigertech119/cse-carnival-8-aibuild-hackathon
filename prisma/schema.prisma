@@ -1,0 +1,140 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Schedule {
+  id         String   @id
+  course     String
+  title      String
+  day        String   // Sunday, Monday, Tuesday, Wednesday, Thursday
+  startTime  String   @map("start_time") // HH:MM
+  endTime    String   @map("end_time")   // HH:MM
+  room       String   // Room number (e.g. 7A07, 7C07, 9A05)
+  instructor String
+  section    String
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@index([day])
+  @@index([course])
+  @@index([room])
+  @@map("schedules")
+}
+
+model Room {
+  id         String     @id
+  roomNumber String     @unique @map("room_number")
+  type       String     // classroom, lab, seminar
+  capacity   Int
+  equipment  String     // JSON string array of equipment: ["projector", "AC", ...]
+  floor      Int
+  status     String     // available, unavailable
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime   @updatedAt @map("updated_at")
+
+  bookings   Booking[]
+
+  @@index([type])
+  @@index([status])
+  @@index([capacity])
+  @@map("rooms")
+}
+
+model Booking {
+  bookingId  String   @id @map("booking_id")
+  roomNumber String   @map("room_number")
+  bookedBy   String   @map("booked_by")
+  date       String   // YYYY-MM-DD
+  startTime  String   @map("start_time") // HH:MM
+  endTime    String   @map("end_time")   // HH:MM
+  purpose    String
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  room       Room     @relation(fields: [roomNumber], references: [roomNumber], onDelete: Cascade)
+
+  @@index([roomNumber, date])
+  @@index([date])
+  @@map("bookings")
+}
+
+model Event {
+  id            String         @id
+  name          String
+  description   String
+  date          String         // YYYY-MM-DD
+  startTime     String         @map("start_time") // HH:MM
+  endTime       String         @map("end_time")   // HH:MM
+  endDate       String         @map("end_date")   // YYYY-MM-DD
+  venue         String         // Venue room number
+  organizer     String
+  capacity      Int
+  registered    Int            @default(0)
+  status        String         // upcoming, ongoing, completed, cancelled, full
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+
+  registrations Registration[]
+
+  @@index([date])
+  @@index([status])
+  @@index([venue])
+  @@map("events")
+}
+
+model Registration {
+  id           String   @id @default(cuid())
+  eventId      String   @map("event_id")
+  studentId    String   @map("student_id")
+  name         String
+  registeredAt DateTime @default(now()) @map("registered_at")
+
+  event        Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, studentId])
+  @@index([eventId])
+  @@index([studentId])
+  @@map("registrations")
+}
+
+model Announcement {
+  id        String   @id
+  title     String
+  body      String
+  date      String   // YYYY-MM-DD
+  priority  String   // high, medium, low
+  postedBy  String   @map("posted_by")
+  expires   String   // YYYY-MM-DD
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([priority])
+  @@index([date])
+  @@index([expires])
+  @@map("announcements")
+}
+
+model Assignment {
+  id                 String   @id
+  course             String
+  courseTitle        String   @map("course_title")
+  title              String
+  description        String
+  assignedDate       String   @map("assigned_date") // YYYY-MM-DD
+  deadline           String   // YYYY-MM-DD
+  submissionPlatform String   @map("submission_platform")
+  status             String   // pending, submitted, graded, late
+  marks              Int
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  @@index([course])
+  @@index([deadline])
+  @@index([status])
+  @@map("assignments")
+}
