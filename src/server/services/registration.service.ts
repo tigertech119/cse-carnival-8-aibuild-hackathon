@@ -47,20 +47,20 @@ export class RegistrationService {
       );
     }
 
-    // 3. Reject if event is full or registered >= capacity
-    if (event.status === "full" || event.registered >= event.capacity) {
-      throw new BusinessRuleError(
-        `Cannot register: Event '${event.name}' is already full (${event.registered}/${event.capacity} seats filled)`
-      );
-    }
-
-    // 4. Check duplicate student registration
+    // 3. Check duplicate student registration
     const alreadyRegistered = event.registrations.some(
       (r) => r.studentId === data.student_id
     );
     if (alreadyRegistered) {
       throw new ConflictError(
         `Student '${data.name}' (${data.student_id}) is already registered for '${event.name}'`
+      );
+    }
+
+    // 4. Reject if event is full or registered >= capacity
+    if (event.status === "full" || event.registered >= event.capacity) {
+      throw new BusinessRuleError(
+        `Cannot register: Event '${event.name}' is already full (${event.registered}/${event.capacity} seats filled)`
       );
     }
 

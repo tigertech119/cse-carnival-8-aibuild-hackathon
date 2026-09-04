@@ -15,11 +15,13 @@ dist/
 build/
 .next/
 out/
+*.tsbuildinfo
 
 # Editors
 .vscode/
 .idea/
 *.swp
+.agent/
 
 # OS
 .DS_Store

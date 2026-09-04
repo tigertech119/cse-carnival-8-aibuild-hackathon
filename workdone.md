@@ -6,11 +6,11 @@ This document tracks all completed milestones, architectural decisions, file del
 
 ## 📌 Status Summary
 
-- **Current Phase**: Phase 1 Completed (Milestones M0, M1, M2, M3)
-- **Status**: ✅ All 11 Unit Tests Passing · Zero Build Errors · Database Seeded & Verified
-- **Database**: SQLite (`dev.db`) via Prisma ORM (67 seed records imported)
+- **Current Phase**: Milestones M0, M1, M2, M3, M4, M5, M6, M7, M8, and M9 Completed
+- **Status**: ✅ All 18 Unit & API Tests Passing · Zero Build Errors · Complete CampusOS Dashboard Active Across All 5 Domains · Database Seeded & Verified
+- **Database**: SQLite (`dev.db`) via Prisma ORM (67 seed records imported + `/api/reset` restore support)
 - **Framework**: Next.js 14 (App Router) + TypeScript (Strict) + Tailwind CSS
-- **Next Milestone**: Milestone M4 (Complete CRUD API Endpoints)
+- **Next Phase**: Phase 3 / Milestone M10–M11 (AI Assistant Tool Layer & Copilot Integration)
 
 ---
 
@@ -181,13 +181,213 @@ cse-carnival-8-aibuild-hackathon/
 
 ---
 
-## 7. Next Steps (Upcoming Milestones)
+## 5. Milestone M4 — Complete CRUD API
 
-1. **Milestone M4: Complete CRUD API Endpoints**
-   - Route handlers for `/api/schedules`, `/api/rooms`, `/api/bookings`, `/api/events`, `/api/registrations`, `/api/announcements`, `/api/assignments`.
-   - Dedicated action endpoints: `/api/rooms/[roomNumber]/book`, `/api/events/[id]/register`.
-   - One-click reset endpoint: `/api/reset` to restore seed data during evaluation.
-2. **Milestone M5–M10: Campus Data Manager Dashboard UI**
-   - Interactive 5-tab dashboard with real-time optimistic updates and instant persistence.
-3. **Milestone M11–M13: AI Agent & Tool Calling Integration**
-   - Native LLM function calling connecting the agent directly to the domain services.
+- **Status**: ✅ Completed
+- **Implementation Completed**:
+  - Exposed comprehensive, typed REST-style route handlers for all five university domains, bookings, event registrations, room availability checks, and idempotent database reset.
+  - Implemented standardized JSON response and error handling wrapper (`src/lib/api-handler.ts`) translating `AppError`, `NotFoundError` (404), `ValidationError` (400), `ConflictError` (409), and `BusinessRuleError` (422) into uniform HTTP responses with zero leaked stack traces.
+  - Created automated API test suite (`tests/api.test.ts`) validating end-to-end CRUD persistence, filter parameters, booking collisions, duplicate registrations, and capacity enforcement.
+- **Files Created / Modified**:
+  - [`src/lib/api-handler.ts`](file:///e:/AI_Hackerthon/src/lib/api-handler.ts): Standard response helpers (`successResponse`, `errorResponse`, `parseSearchParams`).
+  - [`src/server/services/seed.service.ts`](file:///e:/AI_Hackerthon/src/server/services/seed.service.ts): Reusable database wipe and seed service.
+  - [`src/app/api/reset/route.ts`](file:///e:/AI_Hackerthon/src/app/api/reset/route.ts): `POST /api/reset` restoring the 67 JSON seed records.
+  - [`src/app/api/schedules/route.ts`](file:///e:/AI_Hackerthon/src/app/api/schedules/route.ts): `GET` (filtered by day, course, section, room), `POST`.
+  - [`src/app/api/schedules/[id]/route.ts`](file:///e:/AI_Hackerthon/src/app/api/schedules/[id]/route.ts): `GET`, `PUT`, `PATCH`, `DELETE`.
+  - [`src/app/api/rooms/route.ts`](file:///e:/AI_Hackerthon/src/app/api/rooms/route.ts): `GET` (filtered by type, min_capacity, equipment, floor, status), `POST`.
+  - [`src/app/api/rooms/[id]/route.ts`](file:///e:/AI_Hackerthon/src/app/api/rooms/[id]/route.ts): `GET`, `PUT`, `PATCH`, `DELETE`.
+  - [`src/app/api/rooms/availability/route.ts`](file:///e:/AI_Hackerthon/src/app/api/rooms/availability/route.ts): `GET`, `POST` checking cross-timetable and booking collision.
+  - [`src/app/api/bookings/route.ts`](file:///e:/AI_Hackerthon/src/app/api/bookings/route.ts): `GET` (filtered by room_number, date, booked_by), `POST`.
+  - [`src/app/api/bookings/[id]/route.ts`](file:///e:/AI_Hackerthon/src/app/api/bookings/[id]/route.ts): `GET`, `DELETE` (cancel booking).
+  - [`src/app/api/events/route.ts`](file:///e:/AI_Hackerthon/src/app/api/events/route.ts): `GET` (filtered by status, date, venue, organizer), `POST`.
+  - [`src/app/api/events/[id]/route.ts`](file:///e:/AI_Hackerthon/src/app/api/events/[id]/route.ts): `GET`, `PUT`, `PATCH`, `DELETE`.
+  - [`src/app/api/events/[id]/registrations/route.ts`](file:///e:/AI_Hackerthon/src/app/api/events/[id]/registrations/route.ts): `GET`, `POST` (register student), `DELETE` (cancel registration).
+  - [`src/app/api/announcements/route.ts`](file:///e:/AI_Hackerthon/src/app/api/announcements/route.ts): `GET` (filtered by priority, active_only, as_of_date), `POST`.
+  - [`src/app/api/announcements/[id]/route.ts`](file:///e:/AI_Hackerthon/src/app/api/announcements/[id]/route.ts): `GET`, `PUT`, `PATCH`, `DELETE`.
+  - [`src/app/api/assignments/route.ts`](file:///e:/AI_Hackerthon/src/app/api/assignments/route.ts): `GET` (filtered by course, status, due_before, due_after), `POST`.
+  - [`src/app/api/assignments/[id]/route.ts`](file:///e:/AI_Hackerthon/src/app/api/assignments/[id]/route.ts): `GET`, `PUT`, `PATCH`, `DELETE`.
+  - [`src/server/services/registration.service.ts`](file:///e:/AI_Hackerthon/src/server/services/registration.service.ts): Priority ordering optimization: duplicate student checks executed before capacity checks.
+  - [`tests/api.test.ts`](file:///e:/AI_Hackerthon/tests/api.test.ts): Automated API testing suite.
+- **Testing & Verification**:
+  - `npx vitest run`: 18/18 tests passing (11 unit domain tests + 7 API integration tests).
+  - `npx tsc --noEmit`: 0 type errors.
+  - `npm run build`: Next.js production build succeeded with 18 dynamic & static routes generated.
+  - Reset & Seed test: Verified `POST /api/reset` cleanly clears and repopulates SQLite `dev.db`.
+
+---
+
+## 6. Milestone M5 — Dashboard Shell & Application Navigation
+
+- **Status**: ✅ Completed
+- **Implementation Completed**:
+  - Engineered the responsive enterprise application shell (`AppShell`) featuring a 240px desktop sidebar, mobile slide-over drawer, sticky header with live database connection telemetry, and reset-to-seed trigger.
+  - Implemented the complete reusable UI Design System component family adhering to the Principal Product Designer specification and UI/UX Pro Max intelligence.
+  - Authored typed frontend API client (`src/lib/api-client.ts`) eliminating duplicated fetch code and standardizing error handling.
+  - Implemented the dynamic Overview Dashboard (`src/app/page.tsx`) rendering 5 live KPI metric cards, urgent announcement alerts, today's schedule preview, and upcoming events from SQLite.
+  - Implemented the AI Assistant preview page (`src/app/assistant/page.tsx`) with an interactive copilot chat shell, capability listing, and prompt suggestion chips.
+- **UI/UX Design System**:
+  - **Visual Style**: B2B SaaS High-Density & Precision Minimalist.
+  - **Color Palette (60-30-10 Rule)**:
+    - 60% Canvas & Surfaces: `#F8FAFC` (Slate-50 background), `#FFFFFF` (Card/Modal/Table surfaces).
+    - 30% Neutral Text & Structural Chrome: `#0F172A` (Slate-900 headings), `#334155` (Slate-700 body), `#64748B` (Slate-500 metadata), `#E2E8F0` (Slate-200 borders).
+    - 10% Brand & Signals: Academic Indigo (`#4F46E5`), Emerald Success (`#10B981`), Amber Warning (`#F59E0B`), Rose Danger (`#EF4444`), Sky Info (`#0284C7`).
+  - **Typography Pairing**: `Plus Jakarta Sans` / `Inter` for headings & UI chrome; `JetBrains Mono` / `Fira Code` for room numbers, times, and course codes; `Inter` for clean form and tabular micro-copy.
+  - **Component Library**:
+    - [`src/components/ui/button.tsx`](file:///e:/AI_Hackerthon/src/components/ui/button.tsx): Primary, secondary, outline, danger, ghost variants with tactile micro-interaction (`active:scale-[0.98]`).
+    - [`src/components/ui/badge.tsx`](file:///e:/AI_Hackerthon/src/components/ui/badge.tsx): High-contrast semantic status badges.
+    - [`src/components/ui/card.tsx`](file:///e:/AI_Hackerthon/src/components/ui/card.tsx): Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter.
+    - [`src/components/ui/input.tsx`](file:///e:/AI_Hackerthon/src/components/ui/input.tsx) & [`src/components/ui/select.tsx`](file:///e:/AI_Hackerthon/src/components/ui/select.tsx): Accessible form controls with label linking and error states.
+    - [`src/components/ui/modal.tsx`](file:///e:/AI_Hackerthon/src/components/ui/modal.tsx): Accessible dialog with Escape key listener, backdrop blur (`backdrop-blur-sm`), and focus trap.
+    - [`src/components/ui/confirm-dialog.tsx`](file:///e:/AI_Hackerthon/src/components/ui/confirm-dialog.tsx): Destructive action confirmation with warning/danger styles.
+    - [`src/components/ui/toast.tsx`](file:///e:/AI_Hackerthon/src/components/ui/toast.tsx): Context-driven notification stack with auto-dismiss and close buttons.
+    - [`src/components/ui/table.tsx`](file:///e:/AI_Hackerthon/src/components/ui/table.tsx): High-density data table with row hover highlighting.
+    - [`src/components/ui/empty-state.tsx`](file:///e:/AI_Hackerthon/src/components/ui/empty-state.tsx): Empty state illustration, descriptive guidance, and action trigger.
+    - [`src/components/ui/loading-skeleton.tsx`](file:///e:/AI_Hackerthon/src/components/ui/loading-skeleton.tsx): Subtle pulse skeletons for tables and cards.
+    - [`src/components/ui/tabs.tsx`](file:///e:/AI_Hackerthon/src/components/ui/tabs.tsx): Underline & pill navigation tabs with count badges.
+  - **Layout & Chrome**:
+    - [`src/components/layout/app-shell.tsx`](file:///e:/AI_Hackerthon/src/components/layout/app-shell.tsx): Sidebar, header, responsive drawer, and live database health beacon.
+    - [`src/components/layout/page-header.tsx`](file:///e:/AI_Hackerthon/src/components/layout/page-header.tsx): Reusable page title, description, and primary action header.
+- **Files Created / Modified**:
+  - All 11 design system UI component files in `src/components/ui/`.
+  - `src/components/layout/app-shell.tsx` & `src/components/layout/page-header.tsx`.
+  - `src/lib/api-client.ts`.
+  - `src/app/layout.tsx`.
+  - `src/app/page.tsx`.
+  - `src/app/assistant/page.tsx`.
+- **Testing & Verification**:
+  - `npx vitest run`: 18/18 tests passing.
+  - `npx tsc --noEmit`: 0 type errors.
+  - `npm run build`: Production build succeeded generating 14 static and dynamic pages.
+
+---
+
+## 7. Milestone M6 — Schedule and Assignment Management UI
+
+- **Status**: ✅ Completed
+- **Implementation Completed**:
+  - Implemented the complete interactive **Class Schedules & Timetable** interface at [`/schedules`](file:///e:/AI_Hackerthon/src/app/schedules/page.tsx).
+  - Implemented the complete interactive **Assignments & Coursework** interface at [`/assignments`](file:///e:/AI_Hackerthon/src/app/assignments/page.tsx).
+  - All operations route directly through the backend API endpoints (`/api/schedules` and `/api/assignments`), persisting to SQLite with zero phantom or mock state.
+- **Schedule UX**:
+  - **Dual View Modes**: Seamless toggle between Day-Column Timetable Grid (Sunday through Thursday cards) and dense Tabular List view.
+  - **Dynamic Filters & Search**: Real-time filtering by Academic Day, Course/Title/Instructor/Room search, and Section dropdown.
+  - **Full CRUD Workflow**:
+    - "Add Class Session" modal with input validation (Day of week, Start/End times, Room code, Instructor, Course, Section).
+    - Inline edit trigger populating the modal with current values.
+    - Delete button protected by `ConfirmDialog`.
+    - Instant client-side state synchronization upon mutation with toast feedback.
+- **Assignment UX**:
+  - **High-Density Coursework Table**: Displays Course Code, Assignment Title, Description, Deadline with Urgency Tag, Marks, Submission Platform, and Status.
+  - **Deadline Urgency Indicators**: Dynamic calculation relative to the academic term anchor (Due in X days, Overdue with red alert badge, Due soon with amber badge).
+  - **Inline Status Editor**: Dropdown selector allowing 1-click status transitions (`pending` → `submitted` → `graded` → `late`) that persist immediately to SQLite.
+  - **Full CRUD Workflow**:
+    - "New Assignment" modal supporting Course Code, Course Title, Assignment Title, Description, Assigned Date, Deadline Date, Submission Platform, Points (Marks), and Initial Status.
+    - Inline edit modal and delete confirmation dialog.
+- **Files Created / Modified**:
+  - [`src/app/schedules/page.tsx`](file:///e:/AI_Hackerthon/src/app/schedules/page.tsx): Full schedule management screen with Timetable & Table views.
+  - [`src/app/assignments/page.tsx`](file:///e:/AI_Hackerthon/src/app/assignments/page.tsx): Full assignment management screen with deadline indicators and status changer.
+- **Testing & Verification**:
+  - `npx vitest run`: 18/18 tests passing.
+  - `npx tsc --noEmit`: 0 type errors.
+  - `npm run build`: Production build generated 16 routes with zero compilation warnings.
+
+---
+
+## 8. Milestone M7 — Room Management and Booking UI
+
+- **Status**: ✅ Completed
+- **Implementation Completed**:
+  - Implemented the complete **Campus Rooms & Space Bookings** management suite at [`/rooms`](file:///e:/AI_Hackerthon/src/app/rooms/page.tsx) featuring a 3-tab architecture (Room Directory, Find Available Room, and Active Reservations).
+  - Wired all operations to backend endpoints (`/api/rooms`, `/api/rooms/availability`, `/api/bookings`), enforcing relational conflict detection and immediate database persistence.
+- **Room UX**:
+  - **3-Tab Architecture**:
+    1. **Room Directory**: Grid cards with room code, type, capacity, floor, equipment chips (`projector`, `AC`, `whiteboard`, `computers`), status badge, and action triggers.
+    2. **Find Available Room (Room Finder UX)**: Allows administrators to input Date, Time Slot (Start/End), and Min Capacity requirements. Queries the backend availability engine which cross-references both existing room reservations and weekly scheduled class timetables. Displays matching free rooms alongside detailed collision reasons for unavailable rooms.
+    3. **Active Reservations**: Structured tabular log of all confirmed bookings with 1-click cancel buttons protected by confirmation dialogs.
+  - **Booking Workflow & Conflict Feedback**:
+    - "Reserve Campus Room" modal verifying room existence, availability status, valid timeslots, and collision prevention.
+    - **Real-Time Backend Conflict Error Presentation**: If a conflicting booking or scheduled class collides, the backend error is presented directly in a prominent, contextual alert banner (e.g. *"Room 7A02 is already booked on 2026-09-06 from 14:00 to 16:00"*).
+  - **Room Details Modal**: Deep-dive modal inspecting full equipment list and historical/active booking timeline for any specific room.
+  - **Room CRUD**: "Add Campus Room" and "Edit Room" modals with input validation, plus delete confirmation.
+- **Files Created / Modified**:
+  - [`src/app/rooms/page.tsx`](file:///e:/AI_Hackerthon/src/app/rooms/page.tsx): Complete 3-tab room directory, room finder, and booking management interface.
+- **Testing & Verification**:
+  - `npx vitest run`: 18/18 tests passing.
+  - `npx tsc --noEmit`: 0 type errors.
+  - `npm run build`: Production build generated 17 routes with zero compilation warnings.
+
+---
+
+## 9. Milestone M8 — Event and Registration UI
+
+- **Status**: ✅ Completed
+- **Implementation Completed**:
+  - Implemented the complete **Events, Seminars & Workshops** management dashboard at [`/events`](file:///e:/AI_Hackerthon/src/app/events/page.tsx).
+  - Wired student registration and attendee rosters directly to `/api/events` and `/api/events/[id]/registrations`, enforcing server-side relational constraints and capacity limits.
+- **Event UX**:
+  - **Visual Event Cards**: Displays Event Title, Status Badge (`upcoming`, `ongoing`, `completed`, `full`, `cancelled`), Description, Date/Time, Venue, and Organizer.
+  - **Live Capacity Progress Bar**:
+    - Real-time registered vs. capacity percentage bar (`registered / capacity seats filled`).
+    - Dynamic color coding: Indigo for normal capacity, Amber warning at ≥80% capacity, and Red when full.
+    - Buttons dynamically adapt: Automatically disable and switch to a distinct "Full" or "Cancelled" badge when seats are exhausted.
+  - **Student Registration Modal & Constraint Feedback**:
+    - "Register" modal with inputs for Student ID and Full Name.
+    - Server constraints enforced with instant error banners if a student attempts duplicate registration or attempts to register for a full/cancelled event.
+    - Updates registered counter and recalculates progress bar immediately upon confirmation.
+  - **Attendee Roster & Cancellation Drawer**:
+    - "Attendees" modal showing the complete list of registered students for each event.
+    - Provides a 1-click "Remove" button per attendee, executing backend registration cancellation and decrementing the database counter.
+  - **Full Event CRUD**: "Create Event" and "Edit Event Details" modals with capacity and date validation, plus delete confirmation.
+- **Files Created / Modified**:
+  - [`src/app/events/page.tsx`](file:///e:/AI_Hackerthon/src/app/events/page.tsx): Full event directory, registration workflow, and attendee roster screen.
+- **Testing & Verification**:
+  - `npx vitest run`: 18/18 tests passing.
+  - `npx tsc --noEmit`: 0 type errors.
+  - `npm run build`: Production build generated 18 routes with zero compilation warnings.
+
+---
+
+## 10. Milestone M9 — Announcement Management UI
+
+- **Status**: ✅ Completed
+- **Implementation Completed**:
+  - Implemented the official **Campus Announcements & Bulletin** management interface at [`/announcements`](file:///e:/AI_Hackerthon/src/app/announcements/page.tsx).
+  - Configured multi-dimensional filtering by priority level, active vs. expired lifecycle state, keyword text search, and chronological or priority-weighted sorting.
+  - Linked directly to backend endpoints (`/api/announcements`), persisting all mutations to SQLite.
+- **Announcement UX**:
+  - **Visual Priority Presentation**:
+    - **High Priority**: Red status badge with alert icon and subtle tinted background highlight.
+    - **Medium Priority**: Amber status badge with warning icon.
+    - **Low Priority**: Sky/Indigo status badge with informational icon.
+  - **Active vs. Expired Distinction**:
+    - Expired notices are clearly distinguished with an "Expired" pill tag and dimmed visual opacity, without deleting the records from the underlying database.
+    - Filter controls enable toggling between "All (Active & Expired)", "Active Only", and "Expired Only".
+  - **Sorting Mechanisms**:
+    - "Sort: Newest First" (chronological by date posted).
+    - "Sort: Highest Priority" (weighted: High → Medium → Low).
+  - **Announcement CRUD Workflow**:
+    - "Post Notice" modal with validation for Notice Title, Body text, Priority level, Issuing Department/Office, Posted Date, and Expiration Date.
+    - Inline edit trigger to adjust existing bulletins.
+    - Delete button protected by `ConfirmDialog`.
+- **Files Created / Modified**:
+  - [`src/app/announcements/page.tsx`](file:///e:/AI_Hackerthon/src/app/announcements/page.tsx): Full announcement management bulletin screen with priority badges and active/expired filters.
+- **Testing & Verification**:
+  - `npx vitest run`: 18/18 tests passing (11 unit domain tests + 7 API integration tests).
+  - `npx tsc --noEmit`: 0 type errors.
+  - `npm run build`: Production build generated 19 routes with zero compilation warnings.
+
+---
+
+## 11. Next Steps (Upcoming Milestones)
+
+1. **Milestone M10: Dashboard Live Integration & Refresh Polish**
+2. **Milestone M11: AI Agent & Tool Layer Integration**
+   - Connect LLM function calling to the backend domain services (`RoomService`, `BookingService`, `ScheduleService`, `EventService`, `RegistrationService`, `AnnouncementService`, `AssignmentService`).
+3. **Milestone M12: Autonomous Campus Assistant System Prompt & Reasoning**
+4. **Milestone M13: Multi-turn Memory & Evaluation Run**
+
+
+
+
+
+
