@@ -57,25 +57,25 @@ export function Modal({
       {/* Backdrop */}
       <div
         onClick={onClose}
-        className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
+        className="fixed inset-0 bg-slate-900/40 dark:bg-black/70 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
       />
 
       {/* Modal Container */}
       <div
-        className={`relative w-full ${maxWidthStyles[maxWidth]} bg-white rounded-2xl shadow-xl border border-slate-200/90 overflow-hidden z-10 animate-in zoom-in-95 duration-150`}
+        className={`relative w-full ${maxWidthStyles[maxWidth]} bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200/90 dark:border-slate-800 overflow-hidden z-10 animate-in zoom-in-95 duration-150 transition-colors`}
       >
         {/* Header */}
-        <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+        <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
           <div>
-            <h2 className="text-base font-semibold text-slate-900 tracking-tight">{title}</h2>
+            <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100 tracking-tight">{title}</h2>
             {description && (
-              <p className="text-xs text-slate-500 mt-0.5 tracking-tight">{description}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 tracking-tight">{description}</p>
             )}
           </div>
           <button
             onClick={onClose}
             aria-label="Close dialog"
-            className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+            className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -86,7 +86,7 @@ export function Modal({
 
         {/* Footer */}
         {footer && (
-          <div className="px-6 py-4 bg-slate-50/70 border-t border-slate-100 flex items-center justify-end gap-3">
+          <div className="px-6 py-4 bg-slate-50/70 dark:bg-slate-800/60 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-3">
             {footer}
           </div>
         )}

@@ -355,11 +355,11 @@ export default function RoomsPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredRooms.map((r) => (
-                <Card key={r.id} className="p-5 flex flex-col justify-between hover:border-indigo-200 transition-all">
+                <Card key={r.id} className="p-5 flex flex-col justify-between hover:border-indigo-200 dark:hover:border-indigo-800 transition-all">
                   <div>
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="text-base font-bold font-mono text-slate-900 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200">
+                        <span className="text-base font-bold font-mono text-slate-900 bg-slate-100 dark:text-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700">
                           {r.room_number}
                         </span>
                         <Badge
@@ -369,32 +369,32 @@ export default function RoomsPage() {
                           {r.status}
                         </Badge>
                       </div>
-                      <span className="text-xs font-semibold text-slate-500 capitalize bg-slate-50 px-2 py-0.5 rounded border border-slate-100">
+                      <span className="text-xs font-semibold text-slate-500 capitalize bg-slate-50 dark:bg-slate-800 dark:text-slate-400 px-2 py-0.5 rounded border border-slate-100 dark:border-slate-700">
                         {r.type.replace("_", " ")}
                       </span>
                     </div>
 
-                    <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-slate-600">
+                    <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-slate-600 dark:text-slate-400">
                       <div className="flex items-center gap-1.5">
-                        <Users className="w-3.5 h-3.5 text-slate-400" />
-                        <span>Capacity: <strong className="text-slate-800">{r.capacity}</strong></span>
+                        <Users className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
+                        <span>Capacity: <strong className="text-slate-800 dark:text-slate-200">{r.capacity}</strong></span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <Layers className="w-3.5 h-3.5 text-slate-400" />
-                        <span>Floor: <strong className="text-slate-800">{r.floor}</strong></span>
+                        <Layers className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
+                        <span>Floor: <strong className="text-slate-800 dark:text-slate-200">{r.floor}</strong></span>
                       </div>
                     </div>
 
                     {/* Equipment Chips */}
                     <div className="mt-3">
-                      <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block mb-1.5">
+                      <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider block mb-1.5">
                         Equipment
                       </span>
                       <div className="flex flex-wrap gap-1">
                         {r.equipment.map((eq, i) => (
                           <span
                             key={i}
-                            className="text-[11px] font-medium bg-slate-100 text-slate-600 px-2 py-0.5 rounded border border-slate-200/60"
+                            className="text-[11px] font-medium bg-slate-100 text-slate-600 px-2 py-0.5 rounded border border-slate-200/60 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
                           >
                             {eq}
                           </span>
@@ -404,10 +404,10 @@ export default function RoomsPage() {
                   </div>
 
                   {/* Card Actions */}
-                  <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                     <button
                       onClick={() => setSelectedRoomForDetails(r)}
-                      className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer"
+                      className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 cursor-pointer"
                     >
                       View Details & Bookings ({r.bookings?.length || 0})
                     </button>
@@ -415,21 +415,21 @@ export default function RoomsPage() {
                       <button
                         onClick={() => handleOpenBooking(r.room_number)}
                         title="Book Room"
-                        className="p-1.5 text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors cursor-pointer"
+                        className="p-1.5 text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 dark:text-slate-400 dark:hover:text-emerald-400 dark:hover:bg-emerald-950/50 rounded-lg transition-colors cursor-pointer"
                       >
                         <CalendarPlus className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleOpenEditRoom(r)}
                         title="Edit Room"
-                        className="p-1.5 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors cursor-pointer"
+                        className="p-1.5 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 dark:text-slate-400 dark:hover:text-indigo-400 dark:hover:bg-indigo-950/50 rounded-lg transition-colors cursor-pointer"
                       >
                         <Edit2 className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => setDeletingRoomId(r.id)}
                         title="Delete Room"
-                        className="p-1.5 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                        className="p-1.5 text-slate-500 hover:text-red-600 hover:bg-red-50 dark:text-slate-400 dark:hover:text-red-400 dark:hover:bg-red-950/50 rounded-lg transition-colors cursor-pointer"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -448,10 +448,10 @@ export default function RoomsPage() {
           <Card className="p-5">
             <form onSubmit={handleFindRooms} className="space-y-4">
               <div>
-                <h3 className="text-sm font-bold text-slate-900 tracking-tight">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 tracking-tight">
                   Find Available Room by Date & Time Slot
                 </h3>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   Cross-references against both existing space reservations and regular scheduled classes.
                 </p>
               </div>
@@ -505,21 +505,21 @@ export default function RoomsPage() {
               {/* Available Rooms */}
               <div>
                 <div className="flex items-center gap-2 mb-3">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <h4 className="text-sm font-bold text-slate-900">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                     Available Rooms ({finderResults.available.length})
                   </h4>
                 </div>
                 {finderResults.available.length === 0 ? (
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-500">
+                  <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400">
                     No rooms are free during this exact interval. Check unavailable reasons below.
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     {finderResults.available.map((r) => (
-                      <Card key={r.id} className="p-4 border-emerald-200 bg-emerald-50/20">
+                      <Card key={r.id} className="p-4 border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/20 dark:bg-emerald-950/20">
                         <div className="flex items-center justify-between">
-                          <span className="font-mono font-bold text-sm text-slate-900">
+                          <span className="font-mono font-bold text-sm text-slate-900 dark:text-slate-100">
                             {r.room_number}
                           </span>
                           <Button
@@ -539,7 +539,7 @@ export default function RoomsPage() {
                             Book This Room
                           </Button>
                         </div>
-                        <div className="mt-2 text-xs text-slate-600">
+                        <div className="mt-2 text-xs text-slate-600 dark:text-slate-400">
                           <span>{r.type}</span> • <span>Capacity: {r.capacity}</span> • <span>Floor {r.floor}</span>
                         </div>
                       </Card>
@@ -552,8 +552,8 @@ export default function RoomsPage() {
               {finderResults.unavailable.length > 0 && (
                 <div>
                   <div className="flex items-center gap-2 mb-3">
-                    <XCircle className="w-4 h-4 text-amber-600" />
-                    <h4 className="text-sm font-bold text-slate-900">
+                    <XCircle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">
                       Blocked / Conflicted Rooms ({finderResults.unavailable.length})
                     </h4>
                   </div>
@@ -561,12 +561,12 @@ export default function RoomsPage() {
                     {finderResults.unavailable.map(({ room, reason }, i) => (
                       <div
                         key={i}
-                        className="p-3 bg-amber-50/40 border border-amber-200/80 rounded-xl flex items-start gap-3 text-xs"
+                        className="p-3 bg-amber-50/40 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-900/60 rounded-xl flex items-start gap-3 text-xs"
                       >
-                        <span className="font-mono font-bold text-slate-800 shrink-0">
+                        <span className="font-mono font-bold text-slate-800 dark:text-slate-200 shrink-0">
                           {room.room_number}
                         </span>
-                        <span className="text-slate-600 leading-snug">
+                        <span className="text-slate-600 dark:text-slate-400 leading-snug">
                           {reason}
                         </span>
                       </div>
@@ -583,7 +583,7 @@ export default function RoomsPage() {
       {activeTab === "bookings" && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
               Confirmed Room Bookings ({bookings.length})
             </span>
             <Button
@@ -620,29 +620,29 @@ export default function RoomsPage() {
               <TableBody>
                 {bookings.map((b) => (
                   <TableRow key={b.booking_id}>
-                    <TableCell className="font-mono font-semibold text-slate-500">
+                    <TableCell className="font-mono font-semibold text-slate-500 dark:text-slate-400">
                       {b.booking_id}
                     </TableCell>
-                    <TableCell className="font-mono font-bold text-indigo-700">
+                    <TableCell className="font-mono font-bold text-indigo-700 dark:text-indigo-400">
                       {b.room_number}
                     </TableCell>
                     <TableCell>
-                      <div className="font-medium text-slate-800">{b.date}</div>
-                      <div className="text-[11px] font-mono text-slate-500">
+                      <div className="font-medium text-slate-800 dark:text-slate-200">{b.date}</div>
+                      <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
                         {b.start_time} – {b.end_time}
                       </div>
                     </TableCell>
-                    <TableCell className="font-medium text-slate-900">
+                    <TableCell className="font-medium text-slate-900 dark:text-slate-100">
                       {b.booked_by}
                     </TableCell>
-                    <TableCell className="text-slate-600 max-w-xs truncate">
+                    <TableCell className="text-slate-600 dark:text-slate-400 max-w-xs truncate">
                       {b.purpose}
                     </TableCell>
                     <TableCell className="text-right">
                       <Button
                         size="sm"
                         variant="outline"
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 dark:text-red-400 dark:hover:bg-red-950/40 dark:border-red-900/60"
                         onClick={() => setCancelingBookingId(b.booking_id)}
                       >
                         Cancel
@@ -686,7 +686,7 @@ export default function RoomsPage() {
         <form onSubmit={handleSubmitBooking} className="space-y-4">
           {/* Backend Conflict Error Presentation Banner */}
           {bookingError && (
-            <div className="p-3.5 bg-red-50 border border-red-200 rounded-xl flex items-start gap-2.5 text-xs text-red-800 leading-snug animate-in fade-in">
+            <div className="p-3.5 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/60 rounded-xl flex items-start gap-2.5 text-xs text-red-800 dark:text-red-300 leading-snug animate-in fade-in">
               <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
               <div>
                 <strong className="block font-semibold">Booking Conflict Detected</strong>
@@ -744,14 +744,14 @@ export default function RoomsPage() {
           />
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-slate-700">Reservation Purpose</label>
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Reservation Purpose</label>
             <textarea
               rows={2}
               required
               placeholder="e.g. ACM Programming Contest Practice Session"
               value={bookingFormData.purpose}
               onChange={(e) => setBookingFormData({ ...bookingFormData, purpose: e.target.value })}
-              className="w-full bg-white text-slate-900 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500"
+              className="w-full bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-950 focus:border-indigo-500"
             />
           </div>
         </form>
@@ -849,26 +849,26 @@ export default function RoomsPage() {
       >
         {selectedRoomForDetails && (
           <div className="space-y-4">
-            <div className="grid grid-cols-3 gap-2 p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+            <div className="grid grid-cols-3 gap-2 p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 text-xs">
               <div>
-                <span className="text-slate-500 block">Type</span>
-                <strong className="text-slate-800 capitalize">{selectedRoomForDetails.type}</strong>
+                <span className="text-slate-500 dark:text-slate-400 block">Type</span>
+                <strong className="text-slate-800 dark:text-slate-200 capitalize">{selectedRoomForDetails.type}</strong>
               </div>
               <div>
-                <span className="text-slate-500 block">Capacity</span>
-                <strong className="text-slate-800">{selectedRoomForDetails.capacity} seats</strong>
+                <span className="text-slate-500 dark:text-slate-400 block">Capacity</span>
+                <strong className="text-slate-800 dark:text-slate-200">{selectedRoomForDetails.capacity} seats</strong>
               </div>
               <div>
-                <span className="text-slate-500 block">Floor</span>
-                <strong className="text-slate-800">Level {selectedRoomForDetails.floor}</strong>
+                <span className="text-slate-500 dark:text-slate-400 block">Floor</span>
+                <strong className="text-slate-800 dark:text-slate-200">Level {selectedRoomForDetails.floor}</strong>
               </div>
             </div>
 
             <div>
-              <span className="text-xs font-semibold text-slate-700 block mb-1">Equipment</span>
+              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 block mb-1">Equipment</span>
               <div className="flex flex-wrap gap-1">
                 {selectedRoomForDetails.equipment.map((eq, i) => (
-                  <span key={i} className="text-xs bg-slate-100 px-2 py-0.5 rounded text-slate-700">
+                  <span key={i} className="text-xs bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded text-slate-700 dark:text-slate-300">
                     {eq}
                   </span>
                 ))}
@@ -876,30 +876,30 @@ export default function RoomsPage() {
             </div>
 
             <div>
-              <span className="text-xs font-semibold text-slate-700 block mb-2">
+              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 block mb-2">
                 Active Bookings ({selectedRoomForDetails.bookings?.length || 0})
               </span>
               {(!selectedRoomForDetails.bookings || selectedRoomForDetails.bookings.length === 0) ? (
-                <p className="text-xs text-slate-500 italic">No bookings on record for this room.</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 italic">No bookings on record for this room.</p>
               ) : (
                 <div className="space-y-2">
                   {selectedRoomForDetails.bookings.map((b) => (
                     <div
                       key={b.booking_id}
-                      className="p-3 bg-white border border-slate-200 rounded-lg text-xs flex items-center justify-between"
+                      className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-xs flex items-center justify-between"
                     >
                       <div>
-                        <div className="font-semibold text-slate-800">
+                        <div className="font-semibold text-slate-800 dark:text-slate-200">
                           {b.date} • {b.start_time}–{b.end_time}
                         </div>
-                        <div className="text-slate-500 mt-0.5">
+                        <div className="text-slate-500 dark:text-slate-400 mt-0.5">
                           {b.booked_by}: {b.purpose}
                         </div>
                       </div>
                       <Button
                         size="sm"
                         variant="outline"
-                        className="text-red-600 border-red-200"
+                        className="text-red-600 dark:text-red-400 border-red-200 dark:border-red-900/60 hover:bg-red-50 dark:hover:bg-red-950/40"
                         onClick={() => {
                           setSelectedRoomForDetails(null);
                           setCancelingBookingId(b.booking_id);

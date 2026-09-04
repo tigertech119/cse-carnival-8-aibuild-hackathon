@@ -55,9 +55,9 @@ export default function AssistantPage() {
         {/* Left 2 Cols: Chat Console */}
         <div className="lg:col-span-2 space-y-4">
           <Card className="flex flex-col h-[520px]">
-            <CardHeader className="py-3 px-4 bg-slate-50/70">
+            <CardHeader className="py-3 px-4 bg-slate-50/70 dark:bg-slate-900/60">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-indigo-50 text-indigo-600 rounded-lg border border-indigo-100">
+                <div className="p-1.5 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 rounded-lg border border-indigo-100 dark:border-indigo-900/60">
                   <Bot className="w-4 h-4" />
                 </div>
                 <div>
@@ -77,7 +77,7 @@ export default function AssistantPage() {
                     className={`max-w-md p-3.5 rounded-xl text-xs sm:text-sm leading-relaxed ${
                       m.role === "user"
                         ? "bg-indigo-600 text-white rounded-br-xs"
-                        : "bg-slate-100 text-slate-800 rounded-bl-xs border border-slate-200/70"
+                        : "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-bl-xs border border-slate-200/70 dark:border-slate-700"
                     }`}
                   >
                     {m.text}
@@ -86,7 +86,7 @@ export default function AssistantPage() {
               ))}
             </CardContent>
 
-            <div className="p-3 border-t border-slate-100 bg-white">
+            <div className="p-3 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -99,7 +99,7 @@ export default function AssistantPage() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Ask about room availability, schedules, assignments, or events..."
-                  className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500"
+                  className="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-950 focus:border-indigo-500"
                 />
                 <Button type="submit" size="sm" variant="primary" leftIcon={<Send className="w-3.5 h-3.5" />}>
                   Send
@@ -121,7 +121,7 @@ export default function AssistantPage() {
                 <button
                   key={i}
                   onClick={() => handleSend(p)}
-                  className="w-full text-left p-2.5 rounded-lg border border-slate-200/80 bg-slate-50 hover:bg-indigo-50/70 hover:border-indigo-200 text-xs text-slate-700 hover:text-indigo-900 transition-colors cursor-pointer"
+                  className="w-full text-left p-2.5 rounded-lg border border-slate-200/80 bg-slate-50 hover:bg-indigo-50/70 hover:border-indigo-200 text-xs text-slate-700 hover:text-indigo-900 transition-colors cursor-pointer dark:bg-slate-800/60 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-indigo-950/40 dark:hover:border-indigo-800 dark:hover:text-indigo-300"
                 >
                   "{p}"
                 </button>
@@ -133,7 +133,7 @@ export default function AssistantPage() {
             <CardHeader className="py-3 px-4">
               <CardTitle className="text-sm">Integrated Domain Tools</CardTitle>
             </CardHeader>
-            <CardContent className="p-4 space-y-2.5 text-xs text-slate-600">
+            <CardContent className="p-4 space-y-2.5 text-xs text-slate-600 dark:text-slate-400">
               <div className="flex items-center gap-2.5">
                 <Calendar className="w-4 h-4 text-indigo-500" />
                 <span>Class Timetable Queries & Conflict Checks</span>

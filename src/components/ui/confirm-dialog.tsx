@@ -29,9 +29,9 @@ export function ConfirmDialog({
   variant = "danger",
 }: ConfirmDialogProps) {
   const iconColors = {
-    danger: "text-red-600 bg-red-50 border-red-200",
-    warning: "text-amber-600 bg-amber-50 border-amber-200",
-    primary: "text-indigo-600 bg-indigo-50 border-indigo-200",
+    danger: "text-red-600 bg-red-50 border-red-200 dark:bg-red-950/60 dark:text-red-400 dark:border-red-800",
+    warning: "text-amber-600 bg-amber-50 border-amber-200 dark:bg-amber-950/60 dark:text-amber-400 dark:border-amber-800",
+    primary: "text-indigo-600 bg-indigo-50 border-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-400 dark:border-indigo-800",
   };
 
   const buttonVariants = {
@@ -68,7 +68,7 @@ export function ConfirmDialog({
         >
           <AlertTriangle className="w-5 h-5" />
         </div>
-        <p className="text-sm text-slate-600 leading-relaxed">{message}</p>
+        <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{message}</p>
       </div>
     </Modal>
   );

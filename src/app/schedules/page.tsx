@@ -175,14 +175,14 @@ export default function SchedulesPage() {
         action={
           <div className="flex items-center gap-2">
             {/* View Mode Toggle */}
-            <div className="flex items-center bg-white border border-slate-200 rounded-lg p-0.5">
+            <div className="flex items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-0.5">
               <button
                 onClick={() => setViewMode("timetable")}
                 title="Timetable View"
                 className={`p-1.5 rounded-md transition-colors cursor-pointer ${
                   viewMode === "timetable"
-                    ? "bg-indigo-50 text-indigo-700"
-                    : "text-slate-500 hover:text-slate-900"
+                    ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-400"
+                    : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200"
                 }`}
               >
                 <LayoutGrid className="w-4 h-4" />
@@ -192,8 +192,8 @@ export default function SchedulesPage() {
                 title="Table View"
                 className={`p-1.5 rounded-md transition-colors cursor-pointer ${
                   viewMode === "table"
-                    ? "bg-indigo-50 text-indigo-700"
-                    : "text-slate-500 hover:text-slate-900"
+                    ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-400"
+                    : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200"
                 }`}
               >
                 <List className="w-4 h-4" />
@@ -280,14 +280,14 @@ export default function SchedulesPage() {
           {ACADEMIC_DAYS.filter((d) => selectedDay === "All" || selectedDay === d).map((day) => {
             const daySessions = filteredSchedules.filter((s) => s.day === day);
             return (
-              <Card key={day} className="flex flex-col bg-slate-50/50">
-                <CardHeader className="py-3 px-4 bg-white border-b border-slate-200">
+              <Card key={day} className="flex flex-col bg-slate-50/50 dark:bg-slate-900/40">
+                <CardHeader className="py-3 px-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
                   <div className="flex items-center justify-between w-full">
-                    <CardTitle className="text-sm font-bold text-slate-800 flex items-center gap-1.5">
-                      <Calendar className="w-3.5 h-3.5 text-indigo-600" />
+                    <CardTitle className="text-sm font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                       <span>{day}</span>
                     </CardTitle>
-                    <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                    <span className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
                       {daySessions.length} {daySessions.length === 1 ? "class" : "classes"}
                     </span>
                   </div>
@@ -295,59 +295,59 @@ export default function SchedulesPage() {
 
                 <div className="p-3 space-y-3 flex-1">
                   {daySessions.length === 0 ? (
-                    <div className="py-8 text-center text-xs text-slate-400">
+                    <div className="py-8 text-center text-xs text-slate-400 dark:text-slate-500">
                       No classes scheduled
                     </div>
                   ) : (
                     daySessions.map((s) => (
                       <div
                         key={s.id}
-                        className="bg-white border border-slate-200/90 rounded-xl p-3.5 shadow-2xs hover:border-indigo-300 hover:shadow-xs transition-all space-y-2 group"
+                        className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-xl p-3.5 shadow-2xs hover:border-indigo-300 dark:hover:border-indigo-700 hover:shadow-xs transition-all space-y-2 group"
                       >
                         <div className="flex items-start justify-between gap-2">
-                          <span className="font-mono text-xs font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">
+                          <span className="font-mono text-xs font-bold text-indigo-700 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-2 py-0.5 rounded border border-indigo-100 dark:border-indigo-900/50">
                             {s.course}
                           </span>
-                          <span className="text-[11px] font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+                          <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">
                             Sec {s.section}
                           </span>
                         </div>
 
-                        <h4 className="text-xs font-semibold text-slate-900 leading-snug line-clamp-2">
+                        <h4 className="text-xs font-semibold text-slate-900 dark:text-slate-100 leading-snug line-clamp-2">
                           {s.title}
                         </h4>
 
-                        <div className="pt-1 space-y-1 text-[11px] text-slate-600">
+                        <div className="pt-1 space-y-1 text-[11px] text-slate-600 dark:text-slate-400">
                           <div className="flex items-center gap-1.5">
-                            <Clock className="w-3 h-3 text-slate-400 shrink-0" />
+                            <Clock className="w-3 h-3 text-slate-400 dark:text-slate-500 shrink-0" />
                             <span className="font-mono font-medium">
                               {s.start_time} – {s.end_time}
                             </span>
                           </div>
                           <div className="flex items-center gap-1.5">
-                            <MapPin className="w-3 h-3 text-slate-400 shrink-0" />
-                            <span className="font-mono text-slate-700 font-medium">
+                            <MapPin className="w-3 h-3 text-slate-400 dark:text-slate-500 shrink-0" />
+                            <span className="font-mono text-slate-700 dark:text-slate-300 font-medium">
                               Room {s.room}
                             </span>
                           </div>
                           <div className="flex items-center gap-1.5">
-                            <User className="w-3 h-3 text-slate-400 shrink-0" />
+                            <User className="w-3 h-3 text-slate-400 dark:text-slate-500 shrink-0" />
                             <span className="truncate">{s.instructor}</span>
                           </div>
                         </div>
 
-                        <div className="pt-2 border-t border-slate-100 flex items-center justify-end gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+                        <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
                           <button
                             onClick={() => handleOpenEdit(s)}
                             title="Edit schedule"
-                            className="p-1 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded transition-colors cursor-pointer"
+                            className="p-1 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 rounded transition-colors cursor-pointer"
                           >
                             <Edit2 className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => setDeletingId(s.id)}
                             title="Delete schedule"
-                            className="p-1 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors cursor-pointer"
+                            className="p-1 text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/50 rounded transition-colors cursor-pointer"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -377,33 +377,33 @@ export default function SchedulesPage() {
           <TableBody>
             {filteredSchedules.map((s) => (
               <TableRow key={s.id}>
-                <TableCell className="font-mono font-bold text-indigo-700">
+                <TableCell className="font-mono font-bold text-indigo-700 dark:text-indigo-400">
                   {s.course}
                 </TableCell>
-                <TableCell className="font-medium text-slate-900">{s.title}</TableCell>
+                <TableCell className="font-medium text-slate-900 dark:text-slate-100">{s.title}</TableCell>
                 <TableCell>
-                  <div className="font-medium text-slate-800">{s.day}</div>
-                  <div className="text-[11px] font-mono text-slate-500">
+                  <div className="font-medium text-slate-800 dark:text-slate-200">{s.day}</div>
+                  <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
                     {s.start_time} – {s.end_time}
                   </div>
                 </TableCell>
-                <TableCell className="font-mono font-semibold text-slate-800">
+                <TableCell className="font-mono font-semibold text-slate-800 dark:text-slate-200">
                   {s.room}
                 </TableCell>
-                <TableCell className="font-mono text-slate-600">{s.section}</TableCell>
-                <TableCell className="text-slate-700">{s.instructor}</TableCell>
+                <TableCell className="font-mono text-slate-600 dark:text-slate-400">{s.section}</TableCell>
+                <TableCell className="text-slate-700 dark:text-slate-300">{s.instructor}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex items-center justify-end gap-1">
                     <button
                       onClick={() => handleOpenEdit(s)}
-                      className="p-1.5 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors cursor-pointer"
+                      className="p-1.5 text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 rounded-lg transition-colors cursor-pointer"
                       title="Edit"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => setDeletingId(s.id)}
-                      className="p-1.5 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                      className="p-1.5 text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/50 rounded-lg transition-colors cursor-pointer"
                       title="Delete"
                     >
                       <Trash2 className="w-3.5 h-3.5" />

@@ -211,7 +211,7 @@ export default function AssignmentsPage() {
       );
     }
     return (
-      <span className="text-[11px] text-slate-500">
+      <span className="text-[11px] text-slate-500 dark:text-slate-400">
         Due in {diffDays} days
       </span>
     );
@@ -308,38 +308,38 @@ export default function AssignmentsPage() {
             {filteredAssignments.map((a) => (
               <TableRow key={a.id}>
                 <TableCell>
-                  <div className="font-mono font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded inline-block border border-indigo-100">
+                  <div className="font-mono font-bold text-indigo-700 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-2 py-0.5 rounded inline-block border border-indigo-100 dark:border-indigo-900/50">
                     {a.course}
                   </div>
-                  <div className="text-[11px] text-slate-500 mt-0.5 truncate max-w-[140px]">
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 truncate max-w-[140px]">
                     {a.course_title}
                   </div>
                 </TableCell>
 
                 <TableCell className="max-w-xs">
-                  <div className="font-semibold text-slate-900">{a.title}</div>
-                  <div className="text-xs text-slate-500 line-clamp-1 mt-0.5">
+                  <div className="font-semibold text-slate-900 dark:text-slate-100">{a.title}</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">
                     {a.description}
                   </div>
                 </TableCell>
 
                 <TableCell>
-                  <div className="font-mono text-xs font-semibold text-slate-800 flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                  <div className="font-mono text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
                     <span>{a.deadline}</span>
                   </div>
                   <div className="mt-0.5">{getUrgency(a.deadline, a.status)}</div>
                 </TableCell>
 
                 <TableCell>
-                  <div className="flex items-center gap-1 text-slate-700 font-semibold font-mono text-xs">
+                  <div className="flex items-center gap-1 text-slate-700 dark:text-slate-300 font-semibold font-mono text-xs">
                     <Award className="w-3.5 h-3.5 text-amber-500" />
                     <span>{a.marks} pts</span>
                   </div>
                 </TableCell>
 
                 <TableCell>
-                  <span className="text-xs font-medium text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                  <span className="text-xs font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
                     {a.submission_platform}
                   </span>
                 </TableCell>
@@ -349,7 +349,7 @@ export default function AssignmentsPage() {
                   <select
                     value={a.status}
                     onChange={(e) => handleStatusChange(a.id, e.target.value as Assignment["status"])}
-                    className="text-xs font-semibold rounded-md px-2 py-1 border border-slate-200 bg-white text-slate-800 cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="text-xs font-semibold rounded-md px-2 py-1 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   >
                     <option value="pending">Pending</option>
                     <option value="submitted">Submitted</option>
@@ -362,14 +362,14 @@ export default function AssignmentsPage() {
                   <div className="flex items-center justify-end gap-1">
                     <button
                       onClick={() => handleOpenEdit(a)}
-                      className="p-1.5 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors cursor-pointer"
+                      className="p-1.5 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 dark:text-slate-400 dark:hover:text-indigo-400 dark:hover:bg-indigo-950/50 rounded-lg transition-colors cursor-pointer"
                       title="Edit"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => setDeletingId(a.id)}
-                      className="p-1.5 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                      className="p-1.5 text-slate-500 hover:text-red-600 hover:bg-red-50 dark:text-slate-400 dark:hover:text-red-400 dark:hover:bg-red-950/50 rounded-lg transition-colors cursor-pointer"
                       title="Delete"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -436,13 +436,13 @@ export default function AssignmentsPage() {
           />
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-slate-700">Description</label>
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Description</label>
             <textarea
               rows={3}
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="Detailed instructions or problem scope..."
-              className="w-full bg-white text-slate-900 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500"
+              className="w-full bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-100 dark:focus:ring-indigo-950 focus:border-indigo-500"
             />
           </div>
 
