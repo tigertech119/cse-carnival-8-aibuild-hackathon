@@ -18,7 +18,9 @@ import {
 import { buildSystemPrompt } from './system-prompt';
 import { toolDefinitions, executeTool } from './tools';
 
-const GEMINI_API_KEY = process.env.GOOGLE_API_KEY || '';
+function getGeminiApiKey(): string {
+  return process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY || '';
+}
 const MODEL_NAME = 'gemini-2.0-flash';
 
 export interface ChatMessage {
@@ -68,10 +70,11 @@ export async function runAgent(
   history: ChatMessage[] = [],
   onToolCall?: (name: string, status: string) => void
 ): Promise<AgentResponse> {
-  if (!GEMINI_API_KEY) {
+  const apiKey = getGeminiApiKey();
+  if (!apiKey) {
     return {
       message:
-        'AI assistant is not configured. Please set the GOOGLE_API_KEY environment variable.',
+        'AI assistant is not configured. Please set the GOOGLE_API_KEY (or GEMINI_API_KEY) environment variable.',
       error: 'GOOGLE_API_KEY not set',
     };
   }
@@ -79,7 +82,7 @@ export async function runAgent(
   const { dateStr, timeStr, dayStr } = getBangladeshContext();
   const systemPrompt = buildSystemPrompt(dateStr, timeStr, dayStr);
 
-  const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+  const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({
     model: MODEL_NAME,
     systemInstruction: systemPrompt,

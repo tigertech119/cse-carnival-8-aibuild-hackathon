@@ -1,7 +1,7 @@
 # CampusOS — Intelligent University Operating System
 ### AI Build Hackathon Submission · Ahsanullah University of Science and Technology (AUST)
 
-[![Tests](https://img.shields.io/badge/Tests-38%2F38%20Passed-brightgreen)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-43%2F43%20Passed-brightgreen)](tests/)
 [![Next.js](https://img.shields.io/badge/Next.js-14.2%20App%20Router-black)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6%20Strict-blue)](https://www.typescriptlang.org)
 [![Database](https://img.shields.io/badge/Database-SQLite%20via%20Prisma-indigo)](https://www.prisma.io)
@@ -107,7 +107,7 @@ npx prisma db push
 # 5. Seed initial data (67 records across all 5 systems)
 npm run seed
 
-# 6. Run automated test suite (verifies all 38 tests pass)
+# 6. Run automated test suite (verifies all 43 tests pass)
 npm run test
 
 # 7. Start the development server
@@ -115,6 +115,13 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Optional: Run via Docker
+
+```bash
+docker build -t campusos .
+docker run -p 3000:3000 -e GOOGLE_API_KEY="your-key" campusos
+```
 
 ---
 
@@ -223,14 +230,15 @@ Run the complete test suite:
 npm run test
 ```
 
-### Test Suite Breakdown (38 tests):
+### Test Suite Breakdown (43 tests):
 - `tests/services.test.ts` (11 tests): Unit tests for service layer business rules (conflict rejection, capacity enforcement, duplicate prevention).
 - `tests/api.test.ts` (7 tests): Integration tests for Next.js REST API endpoints and CRUD workflows.
 - `tests/tools.test.ts` (20 tests): End-to-end tool execution tests covering all official judge queries, edge cases, negative paths, and live mutation persistence.
+- `tests/integration.test.ts` (5 tests): Milestone M15 live-data synchronization tests verifying Scenarios A through E between dashboard mutations and AI tool responses.
 
 Type-check verification:
 ```bash
-npx tsc --noEmit
+npm run typecheck
 ```
 
 Production build verification:
@@ -250,5 +258,6 @@ npm run build
 - [x] Edits made via dashboard are immediately visible to AI agent
 - [x] README contains working local setup steps
 - [x] `.env.example` has placeholders only; no real API keys committed
-- [x] 38/38 automated tests passing
-- [x] Clean TypeScript compilation (`npx tsc --noEmit`)
+- [x] 43/43 automated tests passing
+- [x] Clean TypeScript compilation (`npm run typecheck`)
+- [x] Production build generated without errors (`npm run build`)

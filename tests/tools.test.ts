@@ -379,7 +379,7 @@ describe("CampusOS AI Tool Layer & Judge Scenarios (M11 & M14)", () => {
         expires: "2026-09-20",
       });
       expect(createRes.success).toBe(true);
-      const annId = (createRes.data as any).announcement.id;
+      const annId = (createRes as any).data?.announcement?.id;
 
       // 2. Verify in DB
       const inDb = await prisma.announcement.findUnique({ where: { id: annId } });

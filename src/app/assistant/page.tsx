@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import { PageHeader } from "@/components/layout/page-header";
@@ -336,8 +336,8 @@ export default function AssistantPage() {
         <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/60 rounded-lg p-3 text-xs text-amber-800 dark:text-amber-200 flex items-start gap-2">
           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-amber-600" />
           <div>
-            <strong>AI not configured.</strong> Set the <code className="font-mono bg-amber-100 dark:bg-amber-900/40 px-1 rounded">GOOGLE_API_KEY</code> environment variable to enable the AI assistant.
-            Add it to your <code className="font-mono bg-amber-100 dark:bg-amber-900/40 px-1 rounded">.env</code> file and restart the server.
+            <strong>AI not configured.</strong> Set the <code className="font-mono bg-amber-100 dark:bg-amber-900/40 px-1 rounded">GOOGLE_API_KEY</code> (or <code className="font-mono bg-amber-100 dark:bg-amber-900/40 px-1 rounded">GEMINI_API_KEY</code>) environment variable to enable the AI assistant.
+            Add it to your <code className="font-mono bg-amber-100 dark:bg-amber-900/40 px-1 rounded">.env</code> or <code className="font-mono bg-amber-100 dark:bg-amber-900/40 px-1 rounded">.env.local</code> file and restart the dev server.
           </div>
         </div>
       )}

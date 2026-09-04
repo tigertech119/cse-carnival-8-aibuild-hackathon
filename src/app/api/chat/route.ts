@@ -1,4 +1,4 @@
-﻿import { NextRequest } from "next/server";
+import { NextRequest } from "next/server";
 import { runAgent, ChatMessage } from "@/ai/agent";
 
 export async function POST(request: NextRequest) {
@@ -38,13 +38,13 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  const hasKey = !!process.env.GOOGLE_API_KEY;
+  const hasKey = !!(process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY);
   return Response.json({
     status: "ok",
     ai_configured: hasKey,
     model: "gemini-2.0-flash",
     message: hasKey
       ? "AI assistant is ready"
-      : "AI assistant requires GOOGLE_API_KEY environment variable",
+      : "AI assistant requires GOOGLE_API_KEY or GEMINI_API_KEY environment variable",
   });
 }

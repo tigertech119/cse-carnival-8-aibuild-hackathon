@@ -8,6 +8,7 @@ const envSchema = z.object({
   GROQ_API_KEY: z.string().optional(),
   ANTHROPIC_API_KEY: z.string().optional(),
   GOOGLE_API_KEY: z.string().optional(),
+  GEMINI_API_KEY: z.string().optional(),
 });
 
 export const env = envSchema.parse({
@@ -18,4 +19,5 @@ export const env = envSchema.parse({
   GROQ_API_KEY: process.env.GROQ_API_KEY,
   ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
   GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY,
 });
