@@ -21,7 +21,16 @@ import { toolDefinitions, executeTool } from './tools';
 function getGeminiApiKey(): string {
   return process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY || '';
 }
-const MODEL_NAME = 'gemini-2.0-flash';
+const CANDIDATE_MODELS = Array.from(
+  new Set(
+    [
+      process.env.GEMINI_MODEL,
+      'gemini-3.7-flash',
+      'gemini-3.1-flash-lite',
+      'gemini-3.6-flash',
+    ].filter(Boolean) as string[]
+  )
+);
 
 export interface ChatMessage {
   role: 'user' | 'assistant';
@@ -65,6 +74,49 @@ function chatHistoryToGeminiContent(history: ChatMessage[]): Content[] {
   return contents;
 }
 
+async function generateWithFallback(
+  genAI: GoogleGenerativeAI,
+  systemPrompt: string,
+  contents: Content[],
+  modelIndexRef: { current: number }
+) {
+  let lastError: any;
+  for (let i = modelIndexRef.current; i < CANDIDATE_MODELS.length; i++) {
+    const modelName = CANDIDATE_MODELS[i];
+    try {
+      const model = genAI.getGenerativeModel({
+        model: modelName,
+        systemInstruction: systemPrompt,
+        tools: [{ functionDeclarations: toolDefinitions as any }],
+        safetySettings: [
+          {
+            category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+            threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+          },
+        ],
+      });
+      const result = await model.generateContent({ contents });
+      modelIndexRef.current = i;
+      return result;
+    } catch (err: any) {
+      lastError = err;
+      const msg = err?.message || '';
+      const isRecoverable =
+        msg.includes('429') ||
+        msg.includes('503') ||
+        msg.includes('Quota') ||
+        msg.includes('not available') ||
+        msg.includes('404');
+      if (isRecoverable && i < CANDIDATE_MODELS.length - 1) {
+        console.warn(`[CampusOS AI] Model ${modelName} error (${msg.slice(0, 80)}). Falling back to ${CANDIDATE_MODELS[i + 1]}...`);
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw lastError;
+}
+
 export async function runAgent(
   userMessage: string,
   history: ChatMessage[] = [],
@@ -83,40 +135,29 @@ export async function runAgent(
   const systemPrompt = buildSystemPrompt(dateStr, timeStr, dayStr);
 
   const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({
-    model: MODEL_NAME,
-    systemInstruction: systemPrompt,
-    tools: [{ functionDeclarations: toolDefinitions as any }],
-    safetySettings: [
-      {
-        category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-      },
-    ],
-  });
-
   const allToolCalls: Array<{ name: string; args: Record<string, unknown>; result: unknown }> = [];
 
-  // Build full conversation history for Gemini
-  const conversationHistory = chatHistoryToGeminiContent(history);
+  // Build full conversation contents for Gemini
+  const contents: Content[] = [
+    ...chatHistoryToGeminiContent(history),
+    { role: 'user', parts: [{ text: userMessage }] },
+  ];
 
-  // Start chat with history
-  const chat = model.startChat({
-    history: conversationHistory,
-  });
-
-  // Send the new user message
-  let response = await chat.sendMessage(userMessage);
+  const modelIndexRef = { current: 0 };
+  let response = await generateWithFallback(genAI, systemPrompt, contents, modelIndexRef);
   let responseText = '';
   let maxToolRounds = 10; // Safety limit: prevent infinite loops
 
   // Agentic loop: keep executing tools until the model responds with text
   while (maxToolRounds-- > 0) {
     const candidate = response.response.candidates?.[0];
-    if (!candidate) {
+    if (!candidate || !candidate.content) {
       responseText = 'I encountered an issue processing your request. Please try again.';
       break;
     }
+
+    // Append model's candidate content to contents history
+    contents.push(candidate.content);
 
     const parts = candidate.content?.parts || [];
     const functionCalls: FunctionCall[] = parts
@@ -164,12 +205,15 @@ export async function runAgent(
       }
     }
 
-    // Send all function responses back to the model
-    const functionResponseParts: Part[] = functionResponses.map((fr) => ({
-      functionResponse: fr,
-    }));
+    // Send all function responses back to the model with role 'user'
+    contents.push({
+      role: 'user',
+      parts: functionResponses.map((fr) => ({
+        functionResponse: fr,
+      })),
+    });
 
-    response = await chat.sendMessage(functionResponseParts);
+    response = await generateWithFallback(genAI, systemPrompt, contents, modelIndexRef);
   }
 
   if (!responseText) {

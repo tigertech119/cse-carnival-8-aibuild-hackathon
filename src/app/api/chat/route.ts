@@ -26,13 +26,20 @@ export async function POST(request: NextRequest) {
     });
   } catch (error: any) {
     console.error("Chat API error:", error);
+    const isQuota =
+      error?.message?.includes("429") ||
+      error?.message?.includes("Quota") ||
+      error?.message?.includes("Too Many Requests");
+    const userMsg = isQuota
+      ? "Google Gemini API rate/quota limit reached. Please wait a moment and try again."
+      : "I encountered an error processing your request. Please try again.";
     return Response.json(
       {
         success: false,
-        error: "Failed to process chat request",
-        message: "I encountered an error. Please try again.",
+        error: error?.message || "Failed to process chat request",
+        message: userMsg,
       },
-      { status: 500 }
+      { status: isQuota ? 429 : 500 }
     );
   }
 }
@@ -42,7 +49,7 @@ export async function GET() {
   return Response.json({
     status: "ok",
     ai_configured: hasKey,
-    model: "gemini-2.0-flash",
+    model: process.env.GEMINI_MODEL || "gemini-3.7-flash",
     message: hasKey
       ? "AI assistant is ready"
       : "AI assistant requires GOOGLE_API_KEY or GEMINI_API_KEY environment variable",
